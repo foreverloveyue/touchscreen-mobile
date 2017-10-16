@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: #F7F7F7;
+        }
+
+        .box {
+            width: 320px;
+            height: 400px;
+            margin: 10px auto;
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box"></div>
+</body>
+
+</html>
+<script>
+    var box = document.getElementsByClassName('box')[0];
+    var startX, startY, endX, endY, startTime, endTime;
+    box.addEventListener('touchstart', function (e) {
+        var touches = e.targetTouches[0];
+        startX = touches.clientX;
+        startY = touches.clientY;
+        startTime = new Date().getTime();
+    })
+    box.addEventListener('touchend', function (e) {
+
+        endTime = new Date().getTime();
+        var touches = e.changedTouches[0];
+        endX = touches.clientX;
+        endY = touches.clientY;
+        // 5. 判断起始点的坐标和终止点的坐标的差值是否小于5 如果小于则为点击 
+        if (Math.abs(endX - startX) < 5 && Math.abs(endY - startY) < 5 && (endTime - startTime) < 300) {
+            alert("Tap手势触发了!!!");
+        }
+    })
+</script>

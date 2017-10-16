@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>触屏轮播图</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .carousel {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .carousel ul {
+            position: relative;
+            top: 0;
+            margin: 0;
+            padding: 0;
+            /* width: 1000%; */
+            overflow: hidden;
+            list-style: none;
+        }
+
+        .carousel ul li {
+            /* width: 10%; */
+            float: left;
+        }
+
+        .carousel li a {
+            display: block;
+            width: 100%;
+        }
+
+        .carousel a img {
+            width: 100%;
+            height: auto;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel">
+        <ul>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/0.png" alt="">
+          </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/1.png" alt="">
+          </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/2.png" alt="">
+          </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/3.png" alt="">
+          </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/4.png" alt="">
+          </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/5.png" alt="">
+          </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/6.png" alt="">
+          </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+            <img src="./image/7.png" alt="">
+          </a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    var carousel = document.querySelector('.carousel');
+    var ul = carousel.querySelector('ul');
+    var fLi = ul.querySelector('li');
+    var lLi = ul.querySelector('li:last-child');
+    var aLi, carouselWidth , index = 0,
+        timer, startX,endX;
+    // 初始化
+    function init() {
+        ul.appendChild(fLi.cloneNode(true));
+        ul.insertBefore(lLi.cloneNode(true), fLi);
+        aLi = document.querySelectorAll('li');
+        setWidth();
+        index--;
+        console.log(index);
+        ul.style.left = index*carouselWidth + 'px';
+        autoplay();
+    }
+
+    function setWidth() {
+        carouselWidth = carousel.offsetWidth;
+        //console.log(carouselWidth);
+        ul.style.width = carouselWidth * aLi.length + 'px';
+        for (var i = 0; i < aLi.length; i++) {
+          aLi[i].style.width = carouselWidth + 'px';
+        }
+    }
+    //自动播放
+    function autoplay() {
+        timer = setInterval(function () {
+            index--;
+            ul.style.left = index * carouselWidth + 'px';
+            ul.style.transition = 'all 1s';
+        }, 1500)
+    }
+    //.检测索引的变化 调整索引
+    // 给ul添加transitionEnd事件 当ul过渡完成的时候 去监听
+    ul.addEventListener('webkitTransitionEnd', function () {
+        if (index == 0) {
+            index = -8;
+        }
+        if (index == -9) {
+            index = -1;
+        }
+        ul.style.left = index * carouselWidth + 'px';
+        ul.style.transition = '';
+    })
+    init();
+    //触屏滑动
+     ul.addEventListener('touchstart',function(e){
+         clearInterval(timer);
+         var touches=e.targetTouches[0];
+         startX=touches.clientX;
+     })
+     ul.addEventListener('touchend',function(e){
+         var touches=e.changedTouches[0];
+         endX=touches.clientX;
+        if(endX>startX){
+            index++;
+        }else{
+            index--;
+        }
+        ul.style.left = index * carouselWidth + 'px';
+        ul.style.transition = 'all 1s';
+        autoplay();
+     })
+</script>
